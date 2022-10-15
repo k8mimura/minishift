@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/base.css">
+    <title>アパレル情報共有システム　アップロード</title>
+    <script>
+        // ファイル選択ボタンを押す
+        function doUploadFile() {
+            // アップロードファイル最大サイズ
+            var uploadFileSize = document.getElementById('uploadFileSize').value;
+            // ファイルサイズを取得する
+            var file = document.getElementById("file").files;
+            var filesize = file[0].size;
+            if (filesize > uploadFileSize) {
+                document.getElementById("file").value = "";
+                document.getElementById("msgarea").style.height = "20px";
+                document.getElementById('message').innerText = "<%=filesizeOverMsg%>";
+            } else {
+                document.uploadform.action = "/uploadFile";
+                document.uploadform.method = "post";
+                document.uploadform.enctype = "multipart/form-data";
+                document.uploadform.submit();
+            }
+        };
+
+        // アップロードボタンを押す
+        function doUpload() {
+            // ファイル種選択のチェック
+            var filetype = document.getElementById('filetype').value;
+            if (filetype === "0000") {
+                document.getElementById("msgarea").style.height = "20px";
+                document.getElementById('message').innerText = "<%=nofiletypeMsg%>";
+                return;
+            }
+
+            // アップロードファイル名の取得
+            var filepath = document.getElementById('file').value;
+            var split = filepath.split('\\');
+            if (filepath.match('/')) {  // フォルダ間の分割符
+                split = filepath.split('/');
+            }
+            var filename = split[split.length - 1];
+
+            // ファイル選択のチェック
+            if (filename.length > 0) {
+                document.getElementById('uploadFileName').value = filename;
+                document.uploadform.action = "/doUpload";
+                document.uploadform.method = "post";
+                document.uploadform.enctype = "";
+                document.uploadform.submit();
+            } else {
+                document.getElementById("msgarea").style.height = "20px";
+                document.getElementById('message').innerText = "<%=noselectfileMsg%>";
+            }
+        };
+    </script>
+</head>
+
+<body>
+    <form name="uploadform">
+        <div class="base">
+            <div class="leftarea">
+                <div id="menuarea" class="menuarea">
+                    <div class="menutext">
+                        <label class="fontfamily fontsize">
+                            メニュー
+                        </label>
+                    </div>
+                    <div class="menuuploadlink upload" onclick="location.href='/moveUploadPage'">
+                        <p style="min-width:6em;">
+                            <label class="fontfamily fontsize">
+                                <img src="/image/upload.png" width=20 height=20>&nbsp;アップロード
+                            </label>
+                        </p>
+                    </div>
+                    <div class="menudowmloadlink download" onclick="location.href='/moveDownloadPage'">
+                        <p style="min-width:12em;">
+                            <label class="fontfamily fontsize">
+                                <img src="/image/download.png" width=20 height=20>&nbsp;検索・ダウンロード
+                            </label>
+                        </p>
+                    </div>
+                    <div class="menulogoutlink logout" onclick="location.href='/logout'">
+                        <p style="min-width:12em;">
+                            <label class="fontfamily fontsize">
+                                <img src="/image/logout.png" width=20 height=20>&nbsp;ログアウト
+                            </label>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rightarea">
+                <div id="titlearea" class="titlearea d-flex align-items-center">
+                    <table>
+                        <tr>
+                            <td style="width: 16px;"></td>
+                            <td style="min-width:19em;">
+                                <h3>
+                                    <label class="fontfamily">
+                                        アパレル情報共有システム
+                                    </label>
+                                </h3>
+                            </td>
+                            <td style="min-width:13em;">
+                                <h5>
+                                    <label class="fontfamily">
+                                        アップロード画面
+                                    </label>
+                                </h5>
+                            </td>
+                            <td align="right" style="min-width:35em;">
+                                <label class="fontfamily fontsize">
+                                    ログインID：<%=loginid%>
+                                        &nbsp;ユーザ名：<%=username%>
+                                            &nbsp;ユーザ所属企業：<%=kigyoname%>
+                                </label>
+                            </td>
+                            <td style="width: 16px;"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="msgarea" class="msgarea">
+                    <table>
+                        <tr>
+                            <td style="width: 16px;"></td>
+                            <td>
+                                <label id="message" class="text-danger fontsize fontfamily" fontstyle="min-width:50em;">
+                                    <%for(let i=0; i<=msg.length; i++){%>
+                                        <%=msg[i]%><br>
+                                            <% }%>
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="contentarea" class="contentarea">
+                    <table id="contentareatable" align="left">
+                        <tr>
+                            <td style="height:12px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 16px;"></td>
+                            <td align="left">
+                                <select class="selectareatext" id="filetype" name="filetype" style="width: 350px">
+                                    <option value="0000">アップロードファイル種選択</option>
+                                    <%for(var i=0;i<displayPulldown.length;i++){%>
+                                        <option value="<%=displayPulldown[i][0]%>" <%=displayPulldown[i][2]%>>
+                                            <%=displayPulldown[i][1]%>
+                                        </option>
+                                        <%}%>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="height:8px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 16px;"></td>
+                            <td align="left">
+                                <input type="file" id="file" name="uploadFile" style="width: 350px"
+                                    onchange="doUploadFile()">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="height:8px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 16px;"></td>
+                            <td align="right">
+                                <input type="button" class="btn btn-primary" style="width: 120px" value="アップロード"
+                                    onclick="doUpload()">
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="hidden" name="uploadFileName" id="uploadFileName" value="">
+                    <input type="hidden" name="uploadFileSize" id="uploadFileSize" value="<%=uploadFileSize%>">
+                    <input type="hidden" name="messagesize" id="messagesize" value="<%=msg.length%>">
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // 画面レイアウトの調整
+            function resize() {
+                // メッセージエリア高さの調整
+                var msgsize = document.getElementById("messagesize").value;
+                var msgheight = 20;
+                if (msgsize > 1) {
+                    msgheight = 20 * msgsize;
+                    document.getElementById("msgarea").style.height = msgheight + "px";
+                    document.getElementById("contentarea").style.height = (msgheight - 20) + "px";
+                }
+
+                // メニューエリア、左右高さの調整
+                var menuareaHeight = document.getElementById("titlearea").clientHeight + document.getElementById("msgarea").clientHeight + document.getElementById("contentarea").clientHeight;
+                var height = document.getElementById("menuarea").clientHeight;
+                if (menuareaHeight >= height) {
+                    document.getElementById("menuarea").style.height = menuareaHeight + "px";
+                } else {
+                    contentareaHeight = height - 80 - msgheight;
+                    document.getElementById("contentarea").style.height = contentareaHeight + "px";
+                }
+            }
+            window.onresize = resize;
+            resize();
+        </script>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/base.css">
+    <title>アパレル情報共有システム　検索・ダウンロード</title>
+    <script>
+        // クリアボタンを押す
+        function doClear() {
+            // 画面のデータをクリアする
+            document.getElementById('hattyuubangoColumn').value = "";
+            document.getElementById('hinbanColumn').value = "";
+            document.getElementById('shohincodeColumn').value = "";
+            document.getElementById('tyakuyoteibiColumn').value = "";
+            document.getElementById('tenpotyakukiboubiColumn').value = "";
+            document.getElementById('toutyakuyoteibiColumn').value = "";
+            document.getElementById('nyukayoteibiColumn').value = "";
+            document.getElementById('filetype').options[0].selected = true;;
+            document.getElementById('exttype').options[0].selected = true;;
+        }
+
+        // 検索ボタンを押す
+        function search() {
+            document.getElementById("index").value = 1;
+            document.downloadform.action = "/doSearch";
+            document.downloadform.method = "post";
+            document.downloadform.submit();
+        }
+
+        // ダウンロードボタンを押す
+        function download() {
+            // ダウンロードファイル種選択のチェック
+            var filetype = document.getElementById('filetype').value;
+
+            if (filetype === "0000") {
+                document.getElementById('message').innerText = "<%=nofiletypeMsg%>";
+                return;
+            }
+
+            // ダウンロードファイル拡張子選択のチェック
+            var exttype = document.getElementById('exttype').value;
+            if (exttype === "000") {
+                document.getElementById('message').innerText = "<%=noexttypeMsg%>";
+                return;
+            }
+
+            const num = document.getElementById('filetype').selectedIndex;
+            document.getElementById('filetypeName').value = document.downloadform.filetype.options[num].text;
+
+            document.downloadform.action = "/download";
+            document.downloadform.method = "post";
+            document.downloadform.submit();
+            document.getElementById("message").innerText = "<%=downloadMsg%>";
+            document.getElementById("message").style.color = "red";
+        }
+
+        // ページのインデックスを押す
+        function pagemove(e) {
+            document.getElementById("index").value = e.id;
+            document.downloadform.action = "/doSearch";
+            document.downloadform.method = "post";
+            document.downloadform.submit();
+        }
+
+        // データ部のth
+        function changethstyle(index, data) {
+            var leg = data.length + "em";
+            document.getElementById("dataareath" + index).style.minWidth = leg;
+        }
+
+        // データ部のtd
+        function changetdstyle(index, data) {
+            var leg = data.length * 0.75 + "em";
+            document.getElementById("dataareatd" + index).style.minWidth = leg;
+        }
+    </script>
+</head>
+
+<body>
+    <form name="downloadform">
+        <div class="base">
+            <div class="leftarea">
+                <div id="menuarea" class="menuarea">
+                    <div class="menutext">
+                        <label class="fontfamily fontsize">
+                            メニュー
+                        </label>
+                    </div>
+                    <div class="menuuploadlink upload" onclick="location.href='/moveUploadPage'">
+                        <p style="min-width:6em;">
+                            <label class="fontfamily fontsize">
+                                <img src="/image/upload.png" width=20 height=20>&nbsp;アップロード
+                            </label>
+                        </p>
+                    </div>
+                    <div class="menudowmloadlink download" onclick="location.href='/moveDownloadPage'">
+                        <p style="min-width:12em;">
+                            <label class="fontfamily fontsize">
+                                <img src="/image/download.png" width=20 height=20>&nbsp;検索・ダウンロード
+                            </label>
+                        </p>
+                    </div>
+                    <div class="menulogoutlink logout" onclick="location.href='/logout'">
+                        <p style="min-width:12em;">
+                            <label class="fontfamily fontsize">
+                                <img src="/image/logout.png" width=20 height=20>&nbsp;ログアウト
+                            </label>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="rightarea" class="rightarea">
+                <div id="titlearea" class="titlearea d-flex align-items-center">
+                    <table>
+                        <tr>
+                            <td style="width: 16px;"></td>
+                            <td style="min-width:19em;">
+                                <h3>
+                                    <label class="fontfamily">
+                                        アパレル情報共有システム
+                                    </label>
+                                </h3>
+                            </td>
+                            <td style="min-width:13em;">
+                                <h5>
+                                    <label class="fontfamily">
+                                        検索・ダウンロード画面
+                                    </label>
+                                </h5>
+                            </td>
+                            <td align="right" style="min-width:35em;">
+                                <label class="fontfamily fontsize">
+                                    ログインID：<%=loginid%>
+                                        &nbsp;ユーザ名：<%=username%>
+                                            &nbsp;ユーザ所属企業：<%=kigyoname%>
+                                </label>
+                            </td>
+                            <td style="width: 16px;"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="msgarea" class="msgarea">
+                    <table>
+                        <tr>
+                            <td style="width: 16px;"></td>
+                            <td>
+                                <label id="message" class="text-danger fontsize fontfamily" fontstyle="min-width:50em;">
+                                    <%=msg%>
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="contentarea" class="contentarea">
+                    <div id="displayarea" style="height:600px; width: 1900px; overflow-y:scroll; overflow-x:auto;">
+                        <table id="tableinputarea">
+                            <tr>
+                                <td style="width: 16px;"></td>
+                                <td>
+                                    <label class="fontfamily fontsize">
+                                        発注番号
+                                    </label>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 16px;"></td>
+                                <td style="min-width:12em;">
+                                    <input type="text" class="selectareatext" id="hattyuubangoColumn" maxlength="23"
+                                        name="hattyuubangoColumn" value="<%=hattyuubangoColumn%>" />
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td style="height:8px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 16px;"></td>
+                                <td>
+                                    <label class="fontfamily fontsize">
+                                        品番
+                                    </label>
+                                </td>
+                                <td style="width: 16px;"></td>
+                                <td>
+                                    <label class="fontfamily fontsize">
+                                        商品コード
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 16px;"></td>
+                                <td style="min-width:12em;">
+                                    <input type="text" class="selectareatext" id="hinbanColumn" name="hinbanColumn"
+                                        maxlength="20" value="<%=hinbanColumn%>" />
+                                </td>
+                                <td style="width: 16px;"></td>
+                                <td style="min-width:12em;">
+                                    <input type="text" class="selectareatext" id="shohincodeColumn" maxlength="20"
+                                        name="shohincodeColumn" value="<%=shohincodeColumn%>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:8px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 16px;"></td>
+                                <td>
+                                    <label class="fontfamily fontsize">
+                                        当初着予定日
+                                    </label>
+                                </td>
+                                <td style="width: 16px;"></td>
+                                <td>
+                                    <label class="fontfamily fontsize">
+                                        店舗着希望日
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 16px;"></td>
+                                <td style="min-width:12em;">
+                                    <input type="date" class="selectareatext" id="tyakuyoteibiColumn" maxlength="10"
+                                        name="tyakuyoteibiColumn" value="<%=tyakuyoteibiColumn%>" />
+                                </td>
+                                <td style="width: 16px;"></td>
+                                <td style="min-width:12em;">
+                                    <input type="date" class="selectareatext" id="tenpotyakukiboubiColumn"
+                                        maxlength="10" name="tenpotyakukiboubiColumn"
+                                        value="<%=tenpotyakukiboubiColumn%>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:8px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 16px;"></td>
+                                <td>
+                                    <label class="fontfamily fontsize">
+                                        分納着予定日
+                                    </label>
+                                </td>
+                                <td style="width: 16px;"></td>
+                                <td>
+                                    <label class="fontfamily fontsize">
+                                        入荷予定日
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 16px;"></td>
+                                <td style="min-width:12em;">
+                                    <input type="date" class="selectareatext" id="toutyakuyoteibiColumn" maxlength="10"
+                                        name="toutyakuyoteibiColumn" value="<%=toutyakuyoteibiColumn%>" />
+                                </td>
+                                <td style="width: 16px;"></td>
+                                <td style="min-width:12em;">
+                                    <input type="date" class="selectareatext" id="nyukayoteibiColumn" maxlength="10"
+                                        name="nyukayoteibiColumn" value="<%=nyukayoteibiColumn%>" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:8px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 16px;"></td>
+                                <td style="min-width:13em;">
+                                    <select class="selectareatext" id="filetype" name="filetype">
+                                        <option value="0000">ダウンロードファイル種選択</option>
+                                        <%for(var i=0;i<displayPulldown.length;i++){%>
+                                            <option value="<%=displayPulldown[i][0]%>" <%=displayPulldown[i][2]%>>
+                                                <%=displayPulldown[i][1]%>
+                                            </option>
+                                            <%}%>
+                                    </select>
+                                </td>
+                                <td style="width: 16px;"></td>
+                                <td style="min-width:13em;">
+                                    <select class="selectareatext" id="exttype" name="exttype">
+                                        <option value="000">ダウンロードファイル拡張子選択</option>
+                                        <option value="csv" <%=exttypecsv%>>csv</option>
+                                        <option value="tsv" <%=exttypetsv%>>tsv</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="height:8px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 16px;"></td>
+                                <td style="min-width:27em;" colspan="3" align="right">
+                                    <input type="button" class="btn btn-primary" style="width: 120px" value="ダウンロード"
+                                        onclick="download()">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="button" class="btn btn-primary" style="width: 60px" value="検索"
+                                        onclick="search()">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="button" class="btn btn-primary" style="width: 60px" value="クリア"
+                                        onclick="doClear()">
+                                </td>
+                            </tr>
+                        </table>
+                        <% if (datalist.length>0) {%>
+                            <table id="tbl-page" align="right">
+                                <tr>
+                                    <hr>
+                                </tr>
+                                <tr>
+                                    <td style="min-width:2em;" align="center">
+                                        <%if(currentPage>1){%>
+                                            <%var backlink=currentPage-1%>
+                                                <%}else{var backlink=1}%>
+                                                    <a href="javascript:void(0)" onclick="pagemove(this)"
+                                                        id="<%=backlink%>">
+                                                        <label class="fontfamily fontsize">≪</label>
+                                                    </a>
+                                    </td>
+                                    <%for(let i=1; i<=page; i++){%>
+                                        <td style="min-width:2em;" align="center">
+                                            <a href="javascript:void(0)" onclick="pagemove(this)" id="<%=i%>">
+                                                <%if(i==currentPage){%>
+                                                    <label class="fontfamily fontsize">
+                                                        <b>
+                                                            <%=i%>
+                                                        </b>
+                                                    </label>
+                                                    <%}else{%>
+                                                        <label class="fontfamily fontsize">
+                                                            <%=i%>
+                                                        </label>
+                                                        <%}%>
+                                            </a>
+                                        </td>
+                                        <%}%>
+                                            <%if(currentPage<page){%>
+                                                <%var nextlink=currentPage-1+2%>
+                                                    <%}else{var nextlink=page}%>
+                                                        <td style="min-width:2em;" align="center">
+                                                            <a href="javascript:void(0)" onclick="pagemove(this)"
+                                                                id="<%=nextlink%>">
+                                                                <label class="fontfamily fontsize">
+                                                                    ≫
+                                                                </label>
+                                                            </a>
+                                                        </td>
+                                </tr>
+                            </table>
+                            <table id="tbl-bdr" align="center">
+                                <tr>
+                                    <%for (var i=0; i < displaycolumnInfo.length; i++) {%>
+                                        <th id="dataareath<%=i%>">
+                                            <label class="fontfamily fontsize">
+                                                <%=displaycolumnInfo[i][0]%>
+                                            </label>
+                                        </th>
+                                        <script>
+                                            changethstyle("<%=i%>", "<%=displaycolumnInfo[i][0]%>　");
+                                        </script>
+                                        <%}%>
+                                </tr>
+
+                                <%for(var i=0;i<datalist.length;i++){%>
+                                    <% if (i% 2==0){%>
+                                        <tr bgcolor="#F4F7FC">
+                                            <%}else{%>
+                                        <tr>
+                                            <% }%>
+                                                <%for(var j=0;j<datalist[i].length;j++){%>
+                                                    <td id="dataareatd<%=i%><%=j%>">
+                                                        <label class="fontfamily fontsize">
+                                                            <%=datalist[i][j]%>
+                                                        </label>
+                                                    </td>
+                                                    <script>
+                                                        changetdstyle("<%=i%><%=j%>", "<%=datalist[i][j]%>");
+                                                    </script>
+                                                    <%}%>
+                                        </tr>
+                                        <%}%>
+                            </table>
+                            <%}%>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="index" id="index" value="<%=currentPage%>">
+        <input type="hidden" name="filetypeName" id="filetypeName" value="">
+
+        <script>
+            function resize() {
+                var menuareaHeight = document.getElementById("titlearea").clientHeight + document.getElementById("msgarea").clientHeight + document.getElementById("contentarea").clientHeight;
+                var height = document.getElementById("menuarea").clientHeight;
+                if (menuareaHeight >= height) {
+                    document.getElementById("menuarea").style.height = menuareaHeight + "px";
+                } else {
+                    var contentareaHeight = height - 80 - 20;
+                    document.getElementById("contentarea").style.height = contentareaHeight + "px";
+                }
+                var windowWidth = window.innerWidth - 200 - 1;
+                document.getElementById("displayarea").style.width = windowWidth + "px";
+                document.getElementById("displayarea").style.height = document.getElementById("contentarea").clientHeight + "px";
+            }
+            window.onresize = resize;
+            resize();
+        </script>
+
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/base.css">
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/crypto-js.min.js"></script>
+    <title>アパレル情報共有システム　ログイン</title>
+    <script type="text/javascript">
+
+        // ログインを押す
+        function doLogin() {
+            var src = document.getElementById('textPassword').value;
+            var des = "";
+
+            //暗号化キー:"testkey"を用いて暗号化
+            des = CryptoJS.AES.encrypt(src, "hashkey");
+
+            // フォームをコミット
+            document.getElementById('textPassword').value = des;
+            document.loginfrom.action = "/doLogin";
+            document.loginfrom.method = "post";
+            document.loginfrom.submit();
+        }
+    </script>
+</head>
+
+<body>
+    <form name="loginfrom" class="commonform">
+        <div class="login">
+            <div class="titlearea d-flex align-items-center">
+                <table>
+                    <tr>
+                        <td style="width: 16px;"></td>
+                        <td style="min-width:19em;">
+                            <h3>
+                                <label class="fontfamily">
+                                    アパレル情報共有システム
+                                </label>
+                            </h3>
+                        </td>
+                        <td style="min-width:13em;">
+                            <h5>
+                                <label class="fontfamily">
+                                    　ログイン画面
+                                </label>
+                            </h5>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="msgarea">
+                <table>
+                    <tr>
+                        <td style="width: 16px;"></td>
+                        <td>
+                            <label class="text-danger fontsize fontfamily" fontstyle="min-width:50em;">
+                                <%=msg%>
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="contentarea" class="contentarea">
+                <div style="height:64px;"></div>
+                <table align="center">
+                    <tr>
+                        <td align="center">
+                            <div class="form-wrapper">
+                                <input id="textloginId" type="text" style="width: 240px" name="loginId" maxlength="8"
+                                    value="<%=loginId%>" placeholder="ログインID" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:8px;"></td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <div class="form-wrapper">
+                                <input id="textPassword" type="password" style="width: 240px" name="loginPw"
+                                    maxlength="20" placeholder="パスワード" />
+                                <i id="eye" class="fa-solid fa-eye"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:8px;"></td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <input type="button" class="btn btn-primary" style="width: 240px" value="ログイン"
+                                onclick="doLogin()">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </form>
+    <script>
+        let eye = document.getElementById("eye");
+        eye.addEventListener('click', function () {
+            if (this.previousElementSibling.getAttribute('type') == 'password') {
+                this.previousElementSibling.setAttribute('type', 'text');
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            } else {
+                this.previousElementSibling.setAttribute('type', 'password');
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            }
+        })
+    </script>
+</body>
+
+</html>

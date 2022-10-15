@@ -1,0 +1,206 @@
+/* 画面分割全体div*/
+.base {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+/* ログイン画面*/
+.login {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    background-color: #EFEFF7;
+}
+
+/* 左部div*/
+.leftarea {
+    width: 200px;
+    height: 100vh;
+    background-color: #D3DFF2;
+}
+
+/* メニューエリアdiv*/
+.menuarea {
+    width: 200px;
+    height: 90vh;
+    background-color: #D3DFF2;
+}
+
+/* 右部div*/
+.rightarea {
+    /* width: 89.76%; */
+    width: 1720px;
+    height: 100vh;
+    background-color: #EFEFF7;
+}
+
+/* タイトルとログイン者情報エリアdiv */
+.titlearea {
+    height: 80px;
+    background-color: #6E82D0;
+    display: flex;
+    flex-direction: row;
+}
+
+/* メッセージエリアエリアdiv*/
+.msgarea {
+    height: 20px;
+    background-color: #EFEFF7;
+}
+
+/* コンテンツエリアdiv*/
+.contentarea {
+    height: 80%;
+    background-color: #EFEFF7;
+}
+
+/* メニューエリアの要素 */
+/* メニューtext */
+.menutext {
+    height: 40px;
+    margin: 8px;
+    padding: 8px;
+}
+
+/* メニューuploadlink */
+.menuuploadlink {
+    height: 40px;
+    border: solid 1px;
+    margin: 8px;
+    padding: 8px;
+}
+
+/* メニューdowmloadlink */
+.menudowmloadlink {
+    height: 40px;
+    border: solid 1px;
+    margin: 8px;
+    padding: 8px;
+}
+
+/* メニューlogoutlink */
+.menulogoutlink {
+    height: 40px;
+    border: solid 1px;
+    margin: 8px;
+    padding: 8px;
+}
+
+/* マウスオーバー時の背景色 */
+/* uploadlink */
+.upload:hover {
+    background-color: #F9E7C7;
+}
+
+/* downloadlink */
+.download:hover {
+    background-color: #EDB453;
+}
+
+/* downloadlink */
+.logout:hover {
+    background-color: #eb990c;
+}
+
+/* 検索部 textのサイズ */
+.selectareatext {
+    width: 220px;
+    height: 28px;
+}
+
+/* データ部 ページリンクの仕様 */
+a {
+    text-decoration: none;
+}
+
+#tbl-page table,
+#tbl-page td,
+#tbl-page th {
+    border-collapse: collapse;
+    border-top: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+    border-left: 1px solid #697DCE;
+    border-right: 1px solid #697DCE;
+    margin: 2px;
+    padding: 2px;
+}
+
+/* データ部 tableの仕様 */
+#tbl-bdr table,
+#tbl-bdr td,
+#tbl-bdr th {
+    border-collapse: collapse;
+    border-top: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+    border-left: 1px solid #697DCE;
+    border-right: 1px solid #697DCE;
+}
+
+/* 全体フォント */
+.fontsize {
+    font-size: 11pt;
+}
+
+/* 全体フォント */
+.fontfamily {
+    font-family: Meiryo UI;
+}
+
+/* 幅：中 88px*/
+.middlewidth {
+    width: 88px;
+    height: 28px;
+}
+
+/* 幅：大 88px*/
+.largewidth {
+    width: 120px;
+    height: 28px;
+}
+
+/* メニュー部 アイコンの透明度 */
+img {
+    opacity: 0.3;
+}
+
+
+.field-icon {
+    color: #555;
+    float: right;
+    margin-right: 15px;
+    margin-top: -40px;
+    position: relative;
+    z-index: 2;
+}
+
+/* 目のマーク */
+#textloginId {
+    border: none;
+    outline: none;
+}
+
+#textPassword {
+    border: none;
+    outline: none;
+}
+
+.form-wrapper {
+    border: 2px solid gray;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+    width: 240px;
+}
+
+#eye {
+    display: flex;
+    align-items: center;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}

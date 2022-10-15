@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/base.css">
+    <title>アパレル情報共有システム　メニュー</title>
+</head>
+
+<body>
+    <form name="uploadform">
+        <div class="base">
+            <div class="leftarea">
+                <div id="menuarea" class="menuarea">
+                    <div class="menutext">
+                        <label class="fontfamily fontsize">
+                            メニュー
+                        </label>
+                    </div>
+                    <div class="menuuploadlink upload" onclick="location.href='/moveUploadPage'">
+                        <p style="min-width:6em;">
+                            <label class="fontfamily fontsize">
+                                <img src="/image/upload.png" width=20 height=20>&nbsp;アップロード
+                            </label>
+                        </p>
+                    </div>
+                    <div class="menudowmloadlink download" onclick="location.href='/moveDownloadPage'">
+                        <p style="min-width:12em;">
+                            <label class="fontfamily fontsize">
+                                <img src="/image/download.png" width=20 height=20>&nbsp;検索・ダウンロード
+                            </label>
+                        </p>
+                    </div>
+                    <div class="menulogoutlink logout" onclick="location.href='/logout'">
+                        <p style="min-width:12em;">
+                            <label class="fontfamily fontsize">
+                                <img src="/image/logout.png" width=20 height=20>&nbsp;ログアウト
+                            </label>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rightarea">
+                <div id="titlearea" class="titlearea d-flex align-items-center">
+                    <table>
+                        <tr>
+                            <td style="width: 16px;"></td>
+                            <td style="min-width:19em;">
+                                <h3>
+                                    <label class="fontfamily">
+                                        アパレル情報共有システム
+                                    </label>
+                                </h3>
+                            </td>
+                            <td style="min-width:13em;">
+                                <h5>
+                                    <label class="fontfamily">
+                                        メニュー画面
+                                    </label>
+                                </h5>
+                            </td>
+                            <td align="right" style="min-width:35em;">
+                                <label class="fontfamily fontsize">
+                                    ログインID：<%=loginid%>
+                                        &nbsp;ユーザ名：<%=username%>
+                                            &nbsp;ユーザ所属企業：<%=kigyoname%>
+                                </label>
+                            </td>
+                            <td style="width: 16px;"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="msgarea" class="msgarea">
+                </div>
+
+                <div id="contentarea" class="contentarea">
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // 画面レイアウトの調整
+            function resize() {
+                var menuareaHeight = document.getElementById("titlearea").clientHeight + document.getElementById("msgarea").clientHeight + document.getElementById("contentarea").clientHeight;
+                var height = document.getElementById("menuarea").clientHeight;
+                if (menuareaHeight >= height) {
+                    document.getElementById("menuarea").style.height = menuareaHeight + "px";
+                } else {
+                    var contentareaHeight = height - 120;
+                    document.getElementById("contentarea").style.height = contentareaHeight + "px";
+                }
+            }
+            window.onresize = resize;
+            resize();
+        </script>
+    </form>
+</body>
+
+</html>
